@@ -18,7 +18,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python -m pip install --quiet cairosvg
+          python -m pip install --quiet cairosvg pillow
           mkdir -p rengo-email-signature/assets
           python - <<'PY'
           from pathlib import Path
@@ -35,18 +35,41 @@ jobs:
               'youtube': f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 24"><rect x="2.5" y="5" width="21" height="14" rx="4.4" fill="none" stroke="{blue}" stroke-width="1.55"/><path d="m11 9 6 3-6 3V9Z" fill="{dark}"/><circle cx="21.25" cy="5.05" r="1.35" fill="{orange}"/></svg>''',
           }
           for name, svg in svgs.items():
-              cairosvg.svg2png(bytestring=svg.encode(), write_to=str(out / f'{name}.png'), output_width=128, output_height=128)
+              cairosvg.svg2png(bytestring=svg.encode(), write_to=str(out / f'{name}.png'), output_width=96, output_height=96)
           PY
-      - name: Copy RENGO brand and trust marks to stable hosting
+      - name: Download and optimize RENGO brand assets
         shell: bash
         run: |
           set -euo pipefail
-          curl --fail --location --retry 3 --output rengo-email-signature/assets/logo.png 'https://rengod.sandbox.hjemmeside.teamrobin.no/uploads/Pcospy7o/rengo.logo__msi___png.png'
-          curl --fail --location --retry 3 --output rengo-email-signature/assets/iso.png 'https://rengod.sandbox.hjemmeside.teamrobin.no/uploads/PL8B5Dsg/rengo.iso__msi___png.png'
-          curl --fail --location --retry 3 --output rengo-email-signature/assets/miljofyrtarn.png 'https://rengod.sandbox.hjemmeside.teamrobin.no/uploads/ngTvqoiE/rengo.Miljfyrtrn__msi___png.png'
-          curl --fail --location --retry 3 --output rengo-email-signature/assets/arbeidstilsynet.png 'https://rengod.sandbox.hjemmeside.teamrobin.no/uploads/PJ6Jyj7L/rengo.Arbeidstilsynet__msi___png.png'
-          curl --fail --location --retry 3 --output rengo-email-signature/assets/rvo.png 'https://rengod.sandbox.hjemmeside.teamrobin.no/uploads/y4oBIqUF/rengo.RVO__msi___png.png'
-          curl --fail --location --retry 3 --output rengo-email-signature/assets/naf.png 'https://rengod.sandbox.hjemmeside.teamrobin.no/uploads/9cMFnfS8/rengo.NAF__msi___png.png'
+          mkdir -p /tmp/rengo-source
+          curl --fail --location --retry 3 --output /tmp/rengo-source/logo.png 'https://rengod.sandbox.hjemmeside.teamrobin.no/uploads/Pcospy7o/rengo.logo__msi___png.png'
+          curl --fail --location --retry 3 --output /tmp/rengo-source/iso.png 'https://rengod.sandbox.hjemmeside.teamrobin.no/uploads/PL8B5Dsg/rengo.iso__msi___png.png'
+          curl --fail --location --retry 3 --output /tmp/rengo-source/miljofyrtarn.png 'https://rengod.sandbox.hjemmeside.teamrobin.no/uploads/ngTvqoiE/rengo.Miljfyrtrn__msi___png.png'
+          curl --fail --location --retry 3 --output /tmp/rengo-source/arbeidstilsynet.png 'https://rengod.sandbox.hjemmeside.teamrobin.no/uploads/PJ6Jyj7L/rengo.Arbeidstilsynet__msi___png.png'
+          curl --fail --location --retry 3 --output /tmp/rengo-source/rvo.png 'https://rengod.sandbox.hjemmeside.teamrobin.no/uploads/y4oBIqUF/rengo.RVO__msi___png.png'
+          curl --fail --location --retry 3 --output /tmp/rengo-source/naf.png 'https://rengod.sandbox.hjemmeside.teamrobin.no/uploads/9cMFnfS8/rengo.NAF__msi___png.png'
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+          src = Path('/tmp/rengo-source')
+          dst = Path('rengo-email-signature/assets')
+          widths = {
+              'logo.png': 96,
+              'iso.png': 150,
+              'miljofyrtarn.png': 120,
+              'arbeidstilsynet.png': 180,
+              'rvo.png': 120,
+              'naf.png': 130,
+          }
+          for name, width in widths.items():
+              with Image.open(src / name) as im:
+                  im.load()
+                  if im.mode not in ('RGB', 'RGBA'):
+                      im = im.convert('RGBA')
+                  height = max(1, round(im.height * width / im.width))
+                  im = im.resize((width, height), Image.Resampling.LANCZOS)
+                  im.save(dst / name, format='PNG', optimize=True, compress_level=9)
+          PY
       - name: Commit assets
         shell: bash
         run: |
@@ -58,5 +81,5 @@ jobs:
             echo "No changes"
             exit 0
           fi
-          git commit -m "Publish complete RENGO email signature assets"
+          git commit -m "Optimize RENGO email signature assets"
           git push
