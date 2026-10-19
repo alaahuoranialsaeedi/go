@@ -42,6 +42,16 @@ jobs:
           for name, svg in svgs.items():
               cairosvg.svg2png(bytestring=svg.encode(), write_to=str(out / f'{name}.png'), output_width=128, output_height=128)
           PY
+      - name: Copy RENGO brand and trust marks to stable hosting
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --retry 3 --output rengo-email-signature/assets/logo.png 'https://rengod.sandbox.hjemmeside.teamrobin.no/uploads/Pcospy7o/rengo.logo__msi___png.png'
+          curl --fail --location --retry 3 --output rengo-email-signature/assets/iso.png 'https://rengod.sandbox.hjemmeside.teamrobin.no/uploads/PL8B5Dsg/rengo.iso__msi___png.png'
+          curl --fail --location --retry 3 --output rengo-email-signature/assets/miljofyrtarn.png 'https://rengod.sandbox.hjemmeside.teamrobin.no/uploads/ngTvqoiE/rengo.Miljfyrtrn__msi___png.png'
+          curl --fail --location --retry 3 --output rengo-email-signature/assets/arbeidstilsynet.png 'https://rengod.sandbox.hjemmeside.teamrobin.no/uploads/PJ6Jyj7L/rengo.Arbeidstilsynet__msi___png.png'
+          curl --fail --location --retry 3 --output rengo-email-signature/assets/rvo.png 'https://rengod.sandbox.hjemmeside.teamrobin.no/uploads/y4oBIqUF/rengo.RVO__msi___png.png'
+          curl --fail --location --retry 3 --output rengo-email-signature/assets/naf.png 'https://rengod.sandbox.hjemmeside.teamrobin.no/uploads/9cMFnfS8/rengo.NAF__msi___png.png'
       - name: Commit assets
         shell: bash
         run: |
@@ -53,5 +63,5 @@ jobs:
             echo "No changes"
             exit 0
           fi
-          git commit -m "Publish RENGO email signature PNG assets"
+          git commit -m "Publish complete RENGO email signature assets"
           git push
