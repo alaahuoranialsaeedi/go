@@ -1,0 +1,62 @@
+name: Publish complete RENGO signature assets
+
+on:
+  push:
+    paths:
+      - '.github/workflows/publish-complete-rengo-signature-assets.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build branded PNG icons
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --quiet cairosvg
+          mkdir -p rengo-email-signature/assets
+          python - <<'PY'
+          from pathlib import Path
+          import cairosvg
+          out = Path('rengo-email-signature/assets')
+          blue = '#087FB6'; orange = '#F28A00'; dark = '#111111'
+          svgs = {
+              'phone': f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.79 19.79 0 0 1 3.09 5.18 2 2 0 0 1 5.07 3h3a2 2 0 0 1 2 1.72c.12.9.33 1.78.62 2.62a2 2 0 0 1-.45 2.11L9 10.7a16 16 0 0 0 4.3 4.3l1.25-1.24a2 2 0 0 1 2.11-.45c.84.29 1.72.5 2.62.62A2 2 0 0 1 22 16.92Z" fill="none" stroke="{blue}" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/><circle cx="19.1" cy="4.9" r="1.35" fill="{orange}"/></svg>''',
+              'email': f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect x="3" y="5.25" width="18" height="13.5" rx="2.5" fill="none" stroke="{blue}" stroke-width="1.75"/><path d="m4.7 7 7.3 5.45L19.3 7" fill="none" stroke="{blue}" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/><circle cx="19.2" cy="4.8" r="1.35" fill="{orange}"/></svg>''',
+              'web': f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.75" fill="none" stroke="{blue}" stroke-width="1.7"/><path d="M3.55 12h16.9M12 3.25c2.35 2.38 3.55 5.3 3.55 8.75S14.35 18.37 12 20.75M12 3.25C9.65 5.63 8.45 8.55 8.45 12s1.2 6.37 3.55 8.75" fill="none" stroke="{blue}" stroke-width="1.5" stroke-linecap="round"/><circle cx="19.1" cy="4.9" r="1.35" fill="{orange}"/></svg>''',
+              'location': f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 10c0 5.2-8 11-8 11s-8-5.8-8-11a8 8 0 1 1 16 0Z" fill="none" stroke="{blue}" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.45" fill="none" stroke="{blue}" stroke-width="1.65"/><circle cx="19.1" cy="4.9" r="1.35" fill="{orange}"/></svg>''',
+              'facebook': f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.2" fill="none" stroke="{blue}" stroke-width="1.55"/><path d="M13.2 18.2v-5.3h1.85l.3-2.15H13.2V9.4c0-.62.18-1.05 1.1-1.05h1.18V6.4c-.2-.03-.9-.08-1.72-.08-1.7 0-2.86 1.04-2.86 2.96v1.47H9v2.15h1.9v5.3h2.3Z" fill="{dark}"/><circle cx="18.4" cy="5.2" r="1.35" fill="{orange}"/></svg>''',
+              'instagram': f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4.6" fill="none" stroke="{blue}" stroke-width="1.55"/><circle cx="12" cy="12" r="3.55" fill="none" stroke="{dark}" stroke-width="1.55"/><circle cx="16.75" cy="7.25" r="1.18" fill="{orange}"/></svg>''',
+              'youtube': f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 24"><rect x="2.5" y="5" width="21" height="14" rx="4.4" fill="none" stroke="{blue}" stroke-width="1.55"/><path d="m11 9 6 3-6 3V9Z" fill="{dark}"/><circle cx="21.25" cy="5.05" r="1.35" fill="{orange}"/></svg>''',
+          }
+          for name, svg in svgs.items():
+              cairosvg.svg2png(bytestring=svg.encode(), write_to=str(out / f'{name}.png'), output_width=128, output_height=128)
+          PY
+      - name: Copy RENGO brand and trust marks to stable hosting
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --retry 3 --output rengo-email-signature/assets/logo.png 'https://rengod.sandbox.hjemmeside.teamrobin.no/uploads/Pcospy7o/rengo.logo__msi___png.png'
+          curl --fail --location --retry 3 --output rengo-email-signature/assets/iso.png 'https://rengod.sandbox.hjemmeside.teamrobin.no/uploads/PL8B5Dsg/rengo.iso__msi___png.png'
+          curl --fail --location --retry 3 --output rengo-email-signature/assets/miljofyrtarn.png 'https://rengod.sandbox.hjemmeside.teamrobin.no/uploads/ngTvqoiE/rengo.Miljfyrtrn__msi___png.png'
+          curl --fail --location --retry 3 --output rengo-email-signature/assets/arbeidstilsynet.png 'https://rengod.sandbox.hjemmeside.teamrobin.no/uploads/PJ6Jyj7L/rengo.Arbeidstilsynet__msi___png.png'
+          curl --fail --location --retry 3 --output rengo-email-signature/assets/rvo.png 'https://rengod.sandbox.hjemmeside.teamrobin.no/uploads/y4oBIqUF/rengo.RVO__msi___png.png'
+          curl --fail --location --retry 3 --output rengo-email-signature/assets/naf.png 'https://rengod.sandbox.hjemmeside.teamrobin.no/uploads/9cMFnfS8/rengo.NAF__msi___png.png'
+      - name: Commit assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add rengo-email-signature/assets
+          if git diff --cached --quiet; then
+            echo "No changes"
+            exit 0
+          fi
+          git commit -m "Publish complete RENGO email signature assets"
+          git push
