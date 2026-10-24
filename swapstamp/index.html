@@ -224,8 +224,8 @@ function buildBoard(){
 }
 function load(level){
  game.level=Math.max(1,Math.min(1000,Math.floor(level)||1));
- game.moves=game.level===1?6:Math.min(15,8+Math.floor(game.level/4));
- game.target=game.level===1?6:Math.min(36,15+Math.floor(game.level*1.5));
+ game.moves=game.level===1?7:Math.min(15,8+Math.floor(game.level/4));
+ game.target=game.level===1?14:Math.min(36,15+Math.floor(game.level*1.5));
  game.popped=0;game.score=0;game.combo=1;game.bestCombo=1;game.busy=false;game.over=false;game.undo=null;game.undosUsed=0;game.noPopTurns=0;
  dragging=null;activeHover=null;clearFx();$("overlay").classList.remove("show");
  buildBoard();render();updateHud();if(game.level===1)setStatus("المس المربع اللامع لتبدأ. كل ضغطة تبدّل 4 قطع!");else setStatus("ابحث عن مجموعة من 4 متشابهة ✦");
@@ -486,7 +486,7 @@ function showFinish(win){
  game.over=true;game.busy=false;
  $("medal").textContent=win?"🏆":"💫";
  $("modaltitle").textContent=win?"رائع! نجحت 🎉":"محاولة أخرى؟";
- let used=(game.level===1?6:Math.min(15,8+Math.floor(game.level/4)))-game.moves;
+ let used=(game.level===1?7:Math.min(15,8+Math.floor(game.level/4)))-game.moves;
  $("modaldesc").textContent=win?"جمعت "+game.popped+" قطعة خلال "+used+" حركات. سجلت "+game.score+" نقطة. مستعد لمستوى أصعب؟":"جمعت "+game.popped+" قطعة من أصل "+game.target+". ما زال بإمكانك تغيير استراتيجيتك.";
  $("stars").textContent=win?(game.moves>=3?"★ ★ ★":game.moves>=1?"★ ★ ☆":"★ ☆ ☆"):"★ ☆ ☆";
  $("next").textContent=win?"العب المستوى التالي ←":"جرّب مجددًا ↻";
