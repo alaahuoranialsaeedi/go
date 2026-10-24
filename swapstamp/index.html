@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f6f4ff">
+<meta name="description" content="SWAPSTAMP — لعبة ألغاز قابلة للتجربة فورًا: اضغط مربع 2×2، بدّل القطع بالقالب، وصنع سلسلة انفجارات. دون حساب أو تحميل.">
+<meta property="og:title" content="SWAPSTAMP — العب الآن">
+<meta property="og:description" content="أربع قطع. حركة واحدة. احتمالات لا تنتهي. لعبة متصفح دون حساب.">
+<title>SWAPSTAMP — جرّب لعبة القالب المتبادل</title>
+<style>
+:root{--ink:#232143;--muted:#8581a1;--purple:#6755d9;--lav:#eeeaff;--surface:#fff;--cream:#f9f7ff;--teal:#25cba5;--coral:#ff698e}
+*{box-sizing:border-box}html{background:#f9f7ff}body{margin:0;min-height:100dvh;font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;color:var(--ink);background:radial-gradient(ellipse 90% 30% at 5% -9%,#dacfff 0,transparent 78%),radial-gradient(ellipse 70% 30% at 100% 100%,#ddfff5 0,transparent 75%),#f9f7ff;-webkit-tap-highlight-color:transparent}
+button{font:inherit;cursor:pointer}button:disabled{cursor:default;opacity:.39}button:focus-visible,.cell:focus-visible{outline:3px solid #8172f7;outline-offset:2px}
+.wrap{width:min(100%,508px);margin:0 auto;padding:17px 15px 25px}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px}
+.wordmark{display:flex;align-items:center;gap:9px;direction:ltr;font-size:23px;font-weight:1000;letter-spacing:-1.15px}
+.mark{display:grid;grid-template-columns:repeat(2,10px);grid-template-rows:repeat(2,10px);gap:3px;transform:rotate(-12deg);filter:drop-shadow(0 4px 3px #4c3ec337)}
+.mark i{border-radius:4px;background:#8169f5}.mark i:nth-child(2){background:#fc7691}.mark i:nth-child(3){background:#23c7ad}.mark i:nth-child(4){background:#ffd16a}
+.demo{border:1px solid #e0dcf3;background:#ffffffd9;padding:7px 11px;border-radius:30px;color:#776f9d;font-size:10px;font-weight:850;white-space:nowrap}
+.eyebrow{font-size:11px;font-weight:900;letter-spacing:1px;color:#9a83d6;margin-bottom:5px}
+.headline{font-size:clamp(24px,7vw,36px);letter-spacing:-.9px;line-height:1.2;font-weight:1000;margin:0 0 8px}
+.headline b{color:#6552d8}.intro{margin:0 0 18px;color:#817c97;line-height:1.7;font-size:13px}
+.game{background:#fff;border:1px solid #e7e1f5;border-radius:26px;padding:15px 15px 19px;box-shadow:0 26px 65px #5d4b9520,0 7px 16px #8174aa0d}
+.titlebar{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:13px}
+.levelpill{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:900;background:#efebff;border:1px solid #e4ddff;color:#6351bd;padding:10px 13px;border-radius:13px;white-space:nowrap}
+.targetlabel{font-size:11px;font-weight:800;color:#8580a0;text-align:left}
+.targetlabel strong{display:block;font-size:20px;color:#292243;letter-spacing:.2px;line-height:1.25}
+.gamehud{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-bottom:12px}
+.stat{border:1px solid #f0eaf6;background:#faf8ff;border-radius:13px;padding:10px 8px;text-align:center}
+.stat span{font-size:10px;color:#938ca8;display:block;font-weight:800;margin-bottom:4px}.stat strong{display:block;font-size:22px;font-weight:1000;line-height:1.1}
+.stat .remaining{color:#f17e77}.stat .won{color:#30bb9b}
+.meter{height:8px;width:100%;background:#f0edfa;border-radius:18px;overflow:hidden;margin:2px 0 16px}
+.meter>i{display:block;height:100%;width:0;background:linear-gradient(90deg,#41d3a5,#8a79fa);border-radius:18px;transition:width .35s}
+.boardshell{position:relative;background:linear-gradient(150deg,#ede9ff,#e4effd);border-radius:21px;padding:9px;box-shadow:inset 0 2px 6px #6e5dba14;user-select:none}
+.board{--n:7;display:grid;grid-template-columns:repeat(var(--n),1fr);grid-template-rows:repeat(var(--n),1fr);aspect-ratio:1/1;gap:4px;position:relative}
+.cell{min-width:0;min-height:0;width:100%;height:100%;padding:0;border:1px solid #ffffffad;border-radius:10px;display:flex;justify-content:center;align-items:center;background:linear-gradient(150deg,#fffefef2,#f6f4ffb4);box-shadow:inset 0 -2px #d9d3eb65;position:relative;transition:background .15s,transform .13s;outline:none;touch-action:manipulation}
+.cell:hover{background:#ffffff}.cell:active{transform:scale(.94)}.cell.preview{background:#ece2ff;box-shadow:inset 0 0 0 2px #a897ff66}.cell.spark{background:#fff6d9}.cell.pop .gem{transform:scale(.12) rotate(35deg)!important;opacity:0;filter:brightness(1.5)}
+.gem{width:94%;height:94%;max-width:58px;max-height:58px;display:block;filter:drop-shadow(0 4px 0 #6c517a20) drop-shadow(0 6px 5px #684e7240);transition:transform .21s cubic-bezier(.18,.9,.4,1.4),opacity .2s;will-change:transform}
+.cell.born .gem{animation:born .36s cubic-bezier(.12,.8,.23,1.28) both}
+@keyframes born{0%{transform:translateY(-24px) scale(.62);opacity:0}100%{transform:translateY(0) scale(1);opacity:1}}
+@keyframes nod{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 4px #785ffb3c,0 0 0 9px #ffffff88}50%{box-shadow:0 0 0 6px #785ffb6e,0 0 0 13px #ffffffa9}}
+.marker{position:absolute;border:3px solid #765cf1;border-radius:15px;pointer-events:none;z-index:5;animation:pulse 1.1s ease-in-out infinite;background:#e5ddff28;transition:left .12s,top .12s}.marker:after{content:"";position:absolute;inset:-6px;border:2px dashed #ffffff;opacity:.9;border-radius:18px;pointer-events:none}
+.pointer{position:absolute;z-index:7;pointer-events:none;font-size:24px;filter:drop-shadow(0 2px 2px #342a7c70);animation:nod 1.1s ease-in-out infinite}.coach{position:absolute;pointer-events:none;z-index:8;background:#6051d7;color:white;box-shadow:0 8px 15px #7568bc51;border-radius:10px;padding:7px 10px;font-size:11px;font-weight:900;white-space:nowrap}
+.burstlayer{position:absolute;inset:0;pointer-events:none;overflow:hidden;border-radius:19px;z-index:9}.particle{position:absolute;width:8px;height:8px;border-radius:4px;pointer-events:none;animation:fly .63s ease-out forwards;background:var(--color);box-shadow:0 0 6px var(--color)}
+@keyframes fly{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(var(--tx),var(--ty)) scale(.15)}}
+.swapwave{position:absolute;inset:0;border-radius:19px;pointer-events:none;z-index:10;box-shadow:inset 0 0 0 0 #bfa8ff00;transition:box-shadow .25s}.swapwave.on{box-shadow:inset 0 0 0 5px #bfa8ff88}
+.combo{position:absolute;top:39%;left:50%;transform:translate(-50%,-50%) scale(.8);border-radius:14px;z-index:10;background:#252044dd;color:white;padding:10px 17px;font-size:25px;font-weight:1000;direction:ltr;opacity:0;pointer-events:none;text-shadow:0 2px 3px #151030}
+.combo.show{animation:combofly .82s both}@keyframes combofly{0%{opacity:0;transform:translate(-50%,-30%) scale(.55)}20%{opacity:1;transform:translate(-50%,-53%) scale(1.13)}70%{opacity:1}100%{opacity:0;transform:translate(-50%,-95%) scale(.85)}}
+.holding{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:14px 0 10px;padding:13px 14px;border-radius:18px;background:linear-gradient(110deg,#f3f0ff,#effbf9);border:1px solid #e6e0fa}
+.stamptitle{font-size:13px;font-weight:1000;color:#574eb1}.stampsub{font-size:11px;line-height:1.6;color:#9790b0;max-width:145px;margin-top:5px}
+.stampframe{padding:7px;display:grid;grid-template-columns:repeat(2,47px);grid-template-rows:repeat(2,47px);gap:4px;background:#fff;border:2px solid #d7c9ff;border-radius:14px;box-shadow:0 5px 0 #d2c5ee80,0 9px 15px #bcb0e75e}
+.stampcell{background:#f3effe;display:flex;align-items:center;justify-content:center;border-radius:7px}.stampcell .gem{max-width:40px;max-height:40px}
+.ribbon{width:27px;height:27px;color:#a299d8;border:2px solid #d8d0f0;border-radius:999px;display:grid;place-items:center;transform:rotate(180deg);flex-shrink:0;font-size:17px;font-weight:900}
+.message{font-weight:900;font-size:12px;line-height:1.6;min-height:33px;color:#5c54a1;text-align:center;padding:3px 0;margin:4px 0 9px}.message.good{color:#20a989}.message.bad{color:#e76e87}
+.actions{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:8px}.action{border:1px solid #e6e0f4;background:#f8f6fc;border-radius:13px;min-height:48px;color:#6d638d;font-weight:900;font-size:12px;padding:10px 5px;box-shadow:0 3px 0 #e7e2f3;transition:transform .15s}.action:active{transform:translateY(3px);box-shadow:none}.action.hot{color:#fff;border:1px solid #6a59dc;background:linear-gradient(135deg,#8275fc,#6655df);box-shadow:0 4px 0 #5a4bc0}
+.play-note{display:flex;justify-content:center;gap:7px;align-items:center;color:#958eab;font-size:11px;padding:16px 0 0;text-align:center}
+.ctrl{border:0;background:transparent;padding:6px 8px;color:#988fba;font-size:12px;font-weight:850}
+.instructions{color:#8e88a4;line-height:1.7;font-size:11px;text-align:center;padding:13px 12px;margin:0}
+.sheet{position:fixed;inset:0;z-index:50;background:#20174695;backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:20px}
+.sheet.show{display:flex}.sheetcard{width:min(100%,370px);background:#fff;border-radius:27px;text-align:center;padding:27px 24px;box-shadow:0 30px 100px #2e185062;animation:popup .35s cubic-bezier(.13,.9,.3,1.2) both}
+@keyframes popup{from{opacity:0;transform:translateY(25px) scale(.9)}to{opacity:1;transform:translateY(0) scale(1)}}
+.medal{font-size:55px;line-height:1.25;margin:4px 0 9px}.sheettitle{font-size:29px;font-weight:1000;margin:0 0 8px;color:#28214d}.sheetbody{font-size:13px;color:#8a83a0;line-height:1.85;margin-bottom:13px}.stars{font-size:30px;letter-spacing:8px;color:#ffc858;margin:7px 0 20px;text-shadow:0 3px 1px #f4b5454a;direction:ltr}
+.cta{display:block;width:100%;padding:16px;border-radius:15px;border:0;background:linear-gradient(110deg,#7e6ff8,#6554d9);color:white;font-size:16px;font-weight:1000;box-shadow:0 5px 0 #5347ae;cursor:pointer}
+.cta:active{transform:translateY(4px);box-shadow:0 1px 0 #5347ae}
+.lowcta{margin-top:13px;width:100%;padding:8px;color:#9389ab;font-weight:900;border:0;background:none;font-size:12px}
+.foot{text-align:center;color:#aaa4b9;font-size:10px;line-height:1.7;margin-top:15px}
+@media (max-width:375px){.wrap{padding:12px 10px}.game{padding:11px;border-radius:20px}.gamehud{gap:5px}.board{gap:3px}.cell{border-radius:8px}.stampframe{grid-template-columns:repeat(2,40px);grid-template-rows:repeat(2,40px)}.headline{font-size:25px}.actions{gap:5px}.action{font-size:11px;padding:10px 3px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.001s!important;transition-duration:.001s!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="topbar">
+  <div class="wordmark"><span class="mark"><i></i><i></i><i></i><i></i></span>SWAPSTAMP<span style="color:#7564e5">.</span></div>
+  <span class="demo">تجربة تفاعلية ●</span>
+</header>
+<div class="eyebrow">ONE TAP. FOUR PIECES. INFINITE MOVES.</div>
+<h1 class="headline">بدّل أربع قطع. <b>واكسر القاعدة!</b></h1>
+<p class="intro">اضغط مساحة 2×2 لتتبادل قطعها مع القالب. اجمع 4 متشابهة أو أكثر، وشاهد ما سيحدث.</p>
+<main class="game">
+ <div class="titlebar">
+  <div class="levelpill"><span>✦</span> <span id="level">المستوى 01</span></div>
+  <div class="targetlabel">الهدف: اجمع <strong><span id="target">7</span> قطع</strong></div>
+ </div>
+ <div class="gamehud">
+  <div class="stat"><span>الحركات المتبقية</span><strong class="remaining" id="moves">8</strong></div>
+  <div class="stat"><span>قطع جمعتها</span><strong class="won" id="collected">0</strong></div>
+  <div class="stat"><span>النقاط</span><strong id="points">0</strong></div>
+ </div>
+ <div class="meter"><i id="fill"></i></div>
+ <div class="boardshell" id="boardshell">
+  <div class="board" id="board" aria-label="لوحة اللعبة"></div>
+  <div id="marker" class="marker" hidden></div>
+  <div id="coach" class="coach" hidden>اضغط هنا 👇</div>
+  <div id="pointer" class="pointer" hidden>👆</div>
+  <div class="burstlayer" id="burstlayer"></div>
+  <div class="swapwave" id="swapwave"></div>
+  <div class="combo" id="combo"></div>
+ </div>
+ <div class="holding">
+   <div><div class="stamptitle">قالبك الحالي <span>↔</span></div><div class="stampsub">القطع التي تأخذها تصبح قالب الحركة التالية</div></div>
+   <div class="ribbon">⇄</div>
+   <div class="stampframe" id="stamp" aria-label="القطع الموجودة في القالب"></div>
+ </div>
+ <div class="message" id="message" aria-live="polite">المس المربع المحدد لتبدأ اللعب!</div>
+ <div class="actions">
+  <button class="action hot" id="hint">✦ تلميح</button>
+  <button class="action" id="undo" disabled>↶ تراجع</button>
+  <button class="action" id="restart">⟳ إعادة</button>
+ </div>
+ <div class="play-note"><span>بدون حساب • بدون تحميل • العب من الهاتف أو الكمبيوتر</span><button class="ctrl" id="sound" aria-label="الصوت">♫ مغلق</button></div>
+</main>
+<p class="instructions">كل حركة تستبدل القطع الأربع داخل المساحة المختارة بالقطع الأربع التي تحملها. اكسب قبل نفاد الحركات.</p>
+<div class="foot">PROOF OF CONCEPT • لعبة تجريبية وليست إصدارًا تجاريًا</div>
+</div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheeth">
+ <div class="sheetcard"><div class="medal" id="medal">🏆</div><h2 class="sheettitle" id="sheeth"></h2><p class="sheetbody" id="sheetbody"></p><div class="stars" id="stars"></div><button class="cta" id="sheetbtn"></button><button class="lowcta" id="sheetsecond">إعادة اللعب</button></div>
+</div>
+<script>
+(function(){
+"use strict";
+var $=id=>document.getElementById(id);
+var boardEl=$("board"),stampEl=$("stamp"),marker=$("marker"),coach=$("coach"),pointer=$("pointer");
+var n=7,types=4,startLevel=1, S={level:1,moves:8,target:7,collected:0,points:0,board:[],stamp:[],busy:false,over:false,undoUsed:false,history:null,seed:1,tutorial:true,highlight:null,scoreTotal:0};
+var colors=["#ff5b89","#21cba8","#ffc94f","#8e73fa","#52baf9"];
+var names=["كورال","نعناع","شمسي","بنفسجي","أزرق"];
+var previewTimer=null,ctx=null,soundOn=false,activePreview=null;
+var GEM=[
+  '<circle cx="50" cy="51" r="35" fill="#ff5b87"/><ellipse cx="39" cy="28" rx="19" ry="9" transform="rotate(-24 39 28)" fill="#ffc2d3" opacity=".77"/><path d="M19 58Q27 88 60 85" fill="none" stroke="#e94776" stroke-width="5" stroke-linecap="round"/>',
+  '<path d="M49 11 Q59 25 72 21 Q76 38 88 49 Q73 59 79 76 Q58 74 50 89 Q39 74 21 77 Q26 60 11 49 Q27 36 22 23 Q39 26 49 11Z" fill="#23d4b3"/><path d="M25 37 Q42 16 65 23" fill="none" stroke="#a4fff0" stroke-width="8" stroke-linecap="round"/><path d="M27 64Q49 89 75 63" fill="none" stroke="#13b093" stroke-width="5" stroke-linecap="round"/>',
+  '<path d="M50 8 L63 29 L84 22 L79 44 L95 53 L78 66 L81 88 L57 81 L47 97 L36 78 L13 81 L20 58 L4 47 L23 38 L19 17 L41 27Z" fill="#ffc952"/><path d="M30 32Q45 21 57 22" fill="none" stroke="#fff4ba" stroke-width="7" stroke-linecap="round"/>',
+  '<rect x="19" y="19" width="62" height="62" rx="18" fill="#9475ff" transform="rotate(23 50 50)"/><path d="M28 32Q41 17 55 23" fill="none" stroke="#d5c4ff" stroke-width="8" stroke-linecap="round"/><path d="M37 80Q59 84 74 61" fill="none" stroke="#7156d9" stroke-width="5" stroke-linecap="round"/>',
+  '<path d="M50 7C63 24 83 48 83 63C83 82 68 92 50 92S17 82 17 63C17 47 36 24 50 7Z" fill="#5bbcf7"/><path d="M40 26C28 45 25 55 26 64" stroke="#b9ebff" stroke-width="8" stroke-linecap="round" fill="none"/>'
+];
+function gemHTML(t){return '<svg viewBox="0 0 100 100" class="gem" aria-hidden="true" focusable="false">'+GEM[t]+'<ellipse cx="42" cy="50" rx="3.5" ry="4.3" fill="#323044"/><ellipse cx="60" cy="50" rx="3.5" ry="4.3" fill="#323044"/><path d="M46 62 Q51 67 56 62" fill="none" stroke="#323044" stroke-width="3" stroke-linecap="round"/></svg>'}
+function srand(seed){S.seed=(Math.imul(1664525,seed)+1013904223)>>>0;return S.seed/4294967296}
+function random(){return srand(S.seed)}
+function pick(max){return Math.floor(random()*max)}
+function pause(ms){return new Promise(resolve=>setTimeout(resolve,ms))}
+function cloneB(B){return B.map(row=>row.slice())}
+function changeMsg(s,kind){$("message").textContent=s;$("message").className="message"+(kind?" "+kind:"")}
+function saveLevel(level){try{localStorage.setItem("swapstamp_level",String(level))}catch(e){}}
+function audioSound(hz,len=.08,vol=.045){if(!soundOn)return;try{ctx=ctx||new(window.AudioContext||window.webkitAudioContext)();let o=ctx.createOscillator(),v=ctx.createGain();o.type="sine";o.frequency.setValueAtTime(hz,ctx.currentTime);o.frequency.exponentialRampToValueAtTime(hz*1.34,ctx.currentTime+len);v.gain.setValueAtTime(vol,ctx.currentTime);v.gain.exponentialRampToValueAtTime(.0001,ctx.currentTime+len);o.connect(v);v.connect(ctx.destination);o.start();o.stop(ctx.currentTime+len)}catch(e){}}
+function findGroups(B){
+  let visited=Array.from({length:n},()=>Array(n).fill(false)),out=[];
+  for(let r=0;r<n;r++)for(let c=0;c<n;c++){
+   if(visited[r][c]||B[r][c]<0)continue;
+   let type=B[r][c],queue=[[r,c]],group=[],idx=0;visited[r][c]=true;
+   while(idx<queue.length){
+    let [y,x]=queue[idx++];group.push([y,x]);
+    for(let [dy,dx] of [[1,0],[-1,0],[0,1],[0,-1]]){
+     let yy=y+dy,xx=x+dx;
+     if(yy>=0&&yy<n&&xx>=0&&xx<n&&!visited[yy][xx]&&B[yy][xx]===type){visited[yy][xx]=true;queue.push([yy,xx]);}
+    }
+   }
+   if(group.length>=4)out.push({type,cells:group});
+  }
+  return out;
+}
+function fillBoard(){
+ let B=Array.from({length:n},()=>Array.from({length:n},()=>pick(types)));
+ // Keep the opening stable and show a strong, guaranteed first move.
+ for(let round=0;round<10;round++){
+  let gr=findGroups(B);if(!gr.length)break;
+  for(let g of gr)for(let [y,x] of g.cells){B[y][x]=(B[y][x]+1+pick(types-1))%types}
+ }
+ let ar=2,ac=2,targetColor=S.level%types;
+ let wrong=[(targetColor+1)%types,(targetColor+2)%types,(targetColor+3)%types,(targetColor+1)%types];
+ for(let dy=0;dy<2;dy++)for(let dx=0;dx<2;dx++)B[ar+dy][ac+dx]=wrong[dy*2+dx];
+ for(let [y,x] of [[2,1],[3,1],[1,2]])B[y][x]=targetColor;
+ // Stamp produces 7+ contiguous pieces and illustrates the mechanic at once.
+ S.stamp=[targetColor,targetColor,targetColor,targetColor];
+ S.board=B;S.highlight={r:ar,c:ac};S.tutorial=S.level===1;
+}
+function init(level,keepScore){
+ S.level=Math.max(1,Math.min(500,level|0));S.seed=(S.level*19441+92837)>>>0;
+ S.moves=S.level===1?8:Math.min(16,9+Math.floor(S.level/3));
+ S.target=S.level===1?7:Math.min(42,10+3*S.level);
+ S.collected=0;S.points=0;S.busy=false;S.over=false;S.undoUsed=false;S.history=null;
+ fillBoard();$("sheet").classList.remove("show");
+ changeMsg(S.tutorial?"المس المربع المحدد لتبدأ اللعب!":"اختر مربعًا من أربع قطع وبدّله بالقالب ✦");
+ updateHud();render();saveLevel(S.level);
+}
+function updateHud(){
+ $("level").textContent="المستوى "+String(S.level).padStart(2,"0");
+ $("moves").textContent=S.moves;$("target").textContent=S.target;
+ $("collected").textContent=S.collected;$("points").textContent=S.points.toLocaleString("en-US");
+ $("fill").style.width=Math.min(100,S.collected/S.target*100)+"%";
+ $("undo").disabled=!S.history||S.undoUsed||S.busy||S.over;
+}
+function makeMarker(r,c,hint){
+ let shell=$("boardshell"),size=boardEl.getBoundingClientRect(),br=boardEl.getBoundingClientRect(),sr=shell.getBoundingClientRect();
+ let gap=parseFloat(getComputedStyle(boardEl).gap)||4,cs=(br.width-(n-1)*gap)/n;
+ let left=br.left-sr.left+c*(cs+gap),top=br.top-sr.top+r*(cs+gap);
+ marker.hidden=false;marker.style.left=left-2+"px";marker.style.top=top-2+"px";marker.style.width=cs*2+gap+4+"px";marker.style.height=cs*2+gap+4+"px";
+ if(S.tutorial){coach.hidden=false;pointer.hidden=false;coach.style.left=Math.max(0,left+cs*1.1-35)+"px";coach.style.top=Math.max(0,top-28)+"px";pointer.style.left=left+cs*.8+"px";pointer.style.top=top+cs*.75+"px";}
+ else{coach.hidden=true;pointer.hidden=true}
+}
+function hideMarker(){marker.hidden=true;coach.hidden=true;pointer.hidden=true}
+function render(){
+ boardEl.style.setProperty("--n",n);
+ boardEl.innerHTML="";
+ let frag=document.createDocumentFragment();
+ for(let r=0;r<n;r++)for(let c=0;c<n;c++){
+  let cell=document.createElement("button");
+  cell.className="cell";cell.type="button";cell.dataset.r=r;cell.dataset.c=c;
+  cell.setAttribute("aria-label","قطعة "+names[S.board[r][c]]+", الصف "+(r+1)+", العمود "+(c+1));
+  cell.innerHTML=gemHTML(S.board[r][c]);
+  cell.addEventListener("click",()=>swapAt(Math.min(r,n-2),Math.min(c,n-2)));
+  cell.addEventListener("mouseenter",()=>{if(!S.busy&&!S.over){activePreview={r:Math.min(r,n-2),c:Math.min(c,n-2)};showPreview(activePreview)}});
+  cell.addEventListener("mouseleave",()=>{activePreview=null;for(let el of boardEl.querySelectorAll(".preview"))el.classList.remove("preview")});
+  frag.appendChild(cell);
+ }
+ boardEl.appendChild(frag);
+ stampEl.innerHTML=S.stamp.map(t=>'<div class="stampcell">'+gemHTML(t)+'</div>').join("");
+ if(S.tutorial||S.highlight){let dest=S.highlight||{r:2,c:2};requestAnimationFrame(()=>makeMarker(dest.r,dest.c,true))}else hideMarker();
+ updateHud();
+}
+function showPreview(m){
+ if(S.tutorial||S.busy||S.over)return;
+ for(let cell of boardEl.children)cell.classList.remove("preview");
+ for(let dy=0;dy<2;dy++)for(let dx=0;dx<2;dx++)boardEl.children[(m.r+dy)*n+m.c+dx]?.classList.add("preview");
+}
+function potential(r,c){
+ let B=cloneB(S.board),old=S.stamp.slice();
+ for(let y=0;y<2;y++)for(let x=0;x<2;x++){B[r+y][c+x]=old[y*2+x]}
+ return findGroups(B).reduce((s,g)=>s+g.cells.length,0);
+}
+function bestMove(){
+ let best=null,bestScore=0;
+ for(let r=0;r<n-1;r++)for(let c=0;c<n-1;c++){
+  let score=potential(r,c);
+  if(score>bestScore){bestScore=score;best={r,c,score}}
+ }
+ return best;
+}
+function rescue(){
+ if(bestMove())return;
+ // A fair rescue: grant a cohesive stamp so there is always a visible legal clear.
+ let t=pick(types);S.stamp=[t,t,t,t];changeMsg("مفاجأة! حصلت على قالب قوي بأربع قطع متشابهة ✦","good");render();
+}
+function burst(cellEl,type){
+ let boardR=boardEl.getBoundingClientRect(),holderR=$("burstlayer").getBoundingClientRect();
+ let cr=cellEl.getBoundingClientRect(),x=cr.left+cr.width/2-holderR.left,y=cr.top+cr.height/2-holderR.top;
+ for(let i=0;i<5;i++){
+  let dot=document.createElement("i");dot.className="particle";dot.style.left=x+"px";dot.style.top=y+"px";dot.style.setProperty("--color",colors[type]);
+  let ang=6.283*(i/5)+random()*.45,range=18+random()*43;
+  dot.style.setProperty("--tx",Math.cos(ang)*range+"px");dot.style.setProperty("--ty",Math.sin(ang)*range+"px");
+  $("burstlayer").appendChild(dot);setTimeout(()=>dot.remove(),700);
+ }
+}
+function toastCombo(text){
+ let t=$("combo");t.classList.remove("show");void t.offsetWidth;t.textContent=text;t.classList.add("show");
+}
+function snapshot(){return {board:cloneB(S.board),stamp:S.stamp.slice(),moves:S.moves,collected:S.collected,points:S.points,seed:S.seed}}
+async function swapAt(r,c){
+ if(S.busy||S.over||S.moves<=0)return;
+ S.busy=true;S.history=snapshot();S.highlight=null;S.tutorial=false;hideMarker();activePreview=null;
+ let stampOld=S.stamp.slice(),stampNew=[];
+ for(let dy=0;dy<2;dy++)for(let dx=0;dx<2;dx++){stampNew.push(S.board[r+dy][c+dx]);S.board[r+dy][c+dx]=stampOld[dy*2+dx]}
+ S.stamp=stampNew;S.moves--;audioSound(310,.085);
+ $("swapwave").classList.add("on");setTimeout(()=>$("swapwave").classList.remove("on"),220);
+ render();for(let dy=0;dy<2;dy++)for(let dx=0;dx<2;dx++)boardEl.children[(r+dy)*n+c+dx]?.classList.add("born");
+ await pause(220);
+ let waves=0,total=0;
+ while(waves<12){
+  let groups=findGroups(S.board);
+  if(!groups.length)break;
+  let cells=groups.flatMap(x=>x.cells.map(([r,c])=>({r,c,type:x.type})));
+  if(cells.length===0)break;
+  waves++;total+=cells.length;S.collected+=cells.length;S.points+=cells.length*100*waves;
+  for(let i=0;i<cells.length;i++){
+   let {r:y,c:x,type}=cells[i],elem=boardEl.children[y*n+x];if(!elem)continue;
+   elem.classList.add("pop");burst(elem,type);
+  }
+  audioSound(400+waves*125,.13,.038);if(waves>1)toastCombo("COMBO ×"+waves);
+  else toastCombo("+"+(cells.length*100));
+  updateHud();await pause(330);
+  let remove=new Set(cells.map(o=>o.r+","+o.c));
+  for(let y=0;y<n;y++)for(let x=0;x<n;x++)if(remove.has(y+","+x))S.board[y][x]=-1;
+  for(let x=0;x<n;x++){
+   let rest=[];for(let y=n-1;y>=0;y--)if(S.board[y][x]>=0)rest.push(S.board[y][x]);
+   for(let y=n-1,k=0;y>=0;y--,k++)S.board[y][x]=k<rest.length?rest[k]:pick(types);
+  }
+  render();for(let el of boardEl.children)el.classList.add("born");
+  await pause(175);
+ }
+ if(total===0){changeMsg("لم تتكوّن مجموعة من أربع قطع. ابحث عن موضع أقوى.","bad");audioSound(180,.09)}
+ else if(S.collected<S.target)changeMsg("رائع! جمعت "+total+" قطع ✨ تابع!", "good");
+ S.busy=false;
+ updateHud();
+ if(S.collected>=S.target){finish(true);return}
+ if(S.moves<=0){finish(false);return}
+ rescue();
+}
+function finish(win){
+ S.over=true;updateHud();
+ $("medal").textContent=win?"🏆":"💫";
+ $("sheeth").textContent=win?"نجحت! هذا الإحساس المطلوب.":"اقتربت! جرّب مجددًا";
+ $("sheetbody").textContent=win?"جمعت "+S.collected+" قطعة في "+(S.history?(S.history.moves-S.moves):1)+" حركة أخيرة. في المستوى التالي ستحتاج قرارات أكثر.":"جمعت "+S.collected+" من أصل "+S.target+" قطعة. جرّب مواضع مختلفة، أو استعن بتلميح.";
+ $("stars").textContent=win?"★ ★ ★":"★ ☆ ☆";
+ $("sheetbtn").textContent=win?"المستوى التالي ←":"أعد المحاولة ↻";
+ $("sheetsecond").textContent=win?"إعادة هذا المستوى":"تراجع عن آخر حركة";
+ $("sheet").classList.add("show");
+ if(win){audioSound(590,.14);setTimeout(()=>audioSound(790,.18),135);setTimeout(()=>audioSound(990,.22),270);
+ try{let prev=Number(localStorage.getItem("swapstamp_level")||1);saveLevel(Math.max(prev,S.level+1))}catch(e){}}
+}
+function undo(){
+ if(!S.history||S.undoUsed||S.busy)return false;
+ S.board=cloneB(S.history.board);S.stamp=S.history.stamp.slice();S.moves=S.history.moves;
+ S.collected=S.history.collected;S.points=S.history.points;S.seed=S.history.seed;
+ S.history=null;S.undoUsed=true;S.busy=false;S.over=false;S.tutorial=false;S.highlight=null;
+ $("sheet").classList.remove("show");render();changeMsg("تم التراجع. اختر حركة مختلفة.","good");audioSound(380);return true;
+}
+$("hint").addEventListener("click",()=>{
+ if(S.busy||S.over)return;
+ let b=bestMove();
+ if(!b){rescue();b=bestMove()}
+ if(b){S.highlight={r:b.r,c:b.c};S.tutorial=false;makeMarker(b.r,b.c,true);changeMsg("المربع المضيء يصنع مجموعة من "+b.score+" قطع ✦","good");audioSound(700)}
+});
+$("undo").onclick=undo;
+$("restart").onclick=()=>init(S.level);
+$("sheetbtn").onclick=()=>init(S.level+(S.collected>=S.target?1:0));
+$("sheetsecond").onclick=()=>{if(S.collected>=S.target)init(S.level);else{if(!undo())init(S.level)}};
+$("sound").onclick=()=>{soundOn=!soundOn;$("sound").textContent=soundOn?"♪ يعمل":"♫ مغلق";audioSound(450,.09)};
+window.addEventListener("resize",()=>{if(!S.busy&&(S.tutorial||S.highlight)){let t=S.highlight||{r:2,c:2};makeMarker(t.r,t.c,true)}});
+document.addEventListener("keydown",e=>{
+ if(e.key==="Escape"&&$("sheet").classList.contains("show")){$("sheet").classList.remove("show")}
+ if((e.key==="z"||e.key==="Z")&&(e.ctrlKey||e.metaKey)){e.preventDefault();undo()}
+});
+try{let params=new URLSearchParams(location.search);let q=params.get("level");startLevel=q?parseInt(q,10)||1:parseInt(localStorage.getItem("swapstamp_level")||"1",10)||1}catch(e){startLevel=1}
+init(startLevel);
+})();
+</script>
+</body>
+</html>
