@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#090e21">
+<title>ECHO ORBIT — لعبة الحلقة الزمنية</title>
+<meta name="description" content="المس كرة لتعود عكس الزمن، واصطدم مع كرة من نفس اللون في انفجار متسلسل. لعبة تجريبية مجانية لا تحتاج إلى تسجيل دخول.">
+<meta property="og:title" content="ECHO ORBIT"><meta property="og:description" content="غيّر الزمن بلمسة، وأطلق سلسلة من الانفجارات الملونة.">
+<style>
+*{box-sizing:border-box}html{background:#090e21}body{margin:0;color:#f8faff;font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;min-height:100dvh;background:radial-gradient(ellipse 75% 55% at 9% 12%,#293566 0,transparent 72%),radial-gradient(ellipse 75% 45% at 90% 83%,#252045 0,transparent 70%),#090e21;overflow-x:hidden}.shell{max-width:480px;margin:auto;padding:24px 16px 22px}.brandrow{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:23px}.logo{font-size:25px;font-weight:1000;letter-spacing:2px;direction:ltr;line-height:1}.logo i{font-style:normal;color:#5affd0}.smallbrand{font-size:10px;letter-spacing:1px;color:#a7b4cf;direction:ltr;margin-top:7px}.iconbtn{height:42px;width:42px;display:grid;place-items:center;border-radius:14px;background:#1c2949;border:1px solid #3a496f;color:#dbe5ff;cursor:pointer;font-size:19px;transition:transform .15s}.iconbtn:active{transform:scale(.93)}.heading{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;margin-bottom:14px}.eyebrow{font-size:12px;color:#9daece;margin-bottom:4px}.title{font-size:27px;font-weight:950;line-height:1.3;letter-spacing:-.6px}.tip{font-size:12px;color:#aebcda;margin:9px 2px 16px;line-height:1.7}.scorebox{text-align:left;direction:ltr}.scorebox small{display:block;font-size:10px;letter-spacing:1.5px;color:#9faed0;font-weight:800}.scorebox strong{font-size:27px;letter-spacing:1px;color:#fbd883;font-weight:900}.hud{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px}.metric{background:#131d39a8;border:1px solid #2d3a5c;border-radius:13px;padding:9px 12px;min-width:0}.metric span{display:block;font-size:10px;color:#92a7cf;margin-bottom:5px}.metric strong{display:block;font-size:17px;font-weight:850;white-space:nowrap}.stage{position:relative;overflow:hidden;border-radius:26px;box-shadow:0 30px 70px #020615a8,inset 0 1px #ffffff20;background:#0b132c;border:1px solid #36456d;isolation:isolate}.stage:before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 50% 51%,#2e63a020 0%,transparent 68%);z-index:1}.stage canvas{width:100%;height:auto;display:block;aspect-ratio:390/460;touch-action:none;cursor:crosshair;position:relative;z-index:2}.level-banner{position:absolute;left:17px;top:16px;padding:7px 13px;background:#101f3bbb;border:1px solid #465c83;border-radius:999px;color:#bcd9fe;font-weight:750;letter-spacing:.4px;font-size:11px;z-index:4;pointer-events:none;direction:ltr}.progresspanel{background:#111a32;border:1px solid #2b3a59;border-radius:19px;margin-top:15px;padding:14px 15px}.progresshead{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:#c1cee4;gap:15px;margin-bottom:10px}.progresshead strong{color:#fff;font-size:14px;direction:ltr}.progress{height:10px;border-radius:999px;background:#27354f;overflow:hidden;position:relative}.fill{width:0;height:100%;border-radius:999px;background:linear-gradient(90deg,#39dcb6,#56baf9,#e294f7);transition:width .4s cubic-bezier(.2,1,.3,1);box-shadow:0 0 14px #41e5c391}.actions{display:flex;gap:10px;margin-top:15px}.primary{border:0;border-radius:15px;padding:15px 18px;background:linear-gradient(110deg,#65f0ce,#4bdcb5);color:#05233a;font-size:14px;font-weight:900;flex:1;cursor:pointer;box-shadow:0 8px 22px #23d6aa33}.secondary{background:#1b2644;color:#d9e7ff;border:1px solid #36476e;border-radius:15px;padding:15px 18px;font-weight:800;cursor:pointer}.primary:disabled{opacity:.55;box-shadow:none;cursor:default}.bottom{font-size:11px;color:#8192b4;text-align:center;margin-top:16px;line-height:1.7}.status{min-height:21px;text-align:center;color:#d4e0f4;font-weight:750;font-size:13px;margin:12px 5px 0;transition:color .2s}.status.good{color:#6dffd8}.modal{position:absolute;inset:0;z-index:12;display:none;justify-content:center;align-items:center;background:#080f27bc;backdrop-filter:blur(7px);padding:20px}.modal.show{display:flex}.modalcard{background:linear-gradient(160deg,#223358,#151e3c);border:1px solid #4a6085;box-shadow:0 25px 60px #050a19b5;border-radius:23px;width:min(100%,320px);padding:28px 22px;text-align:center}.modalicon{font-size:46px;margin-bottom:10px}.modaltitle{font-size:26px;font-weight:1000;margin:0 0 11px}.modaltext{font-size:13px;color:#c4d4ee;line-height:1.85;margin:0 0 22px}.stars{font-size:28px;letter-spacing:8px;color:#f4d47e;margin-bottom:20px}.modal button{width:100%}.footer-note{padding:7px 0 0;font-size:10px;color:#63799f;text-align:center}@media (max-width:370px){.shell{padding:15px 11px}.title{font-size:24px}.logo{font-size:23px}.metric{padding:8px}.metric strong{font-size:15px}}@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style></head><body><main class="shell">
+<header class="brandrow"><div><div class="logo">ECH<i>O</i> ORBIT</div><div class="smallbrand">ONE TOUCH · REVERSE TIME · CHAIN REACTION</div></div><button class="iconbtn" id="sound" aria-label="تشغيل وإيقاف الصوت">♫</button></header>
+<section class="heading"><div><div class="eyebrow">تحدي الحلقة الزمنية</div><div class="title">غيّر الزمن بلمسة</div></div><div class="scorebox"><small>SCORE</small><strong id="score">0000</strong></div></section>
+<p class="tip">المس أي كرة: تعود عكس اتجاه الزمن، وإذا اصطدمت بكرة من اللون نفسه تنفجران!</p>
+<div class="hud"><div class="metric"><span>المستوى</span><strong id="level">01</strong></div><div class="metric"><span>اللمسات المتبقية</span><strong id="moves">08</strong></div><div class="metric"><span>أفضل سلسلة</span><strong id="combo">×1</strong></div></div>
+<div class="stage"><canvas id="arena" width="390" height="460" aria-label="ساحة اللعبة: المس كرة لتحريكها عكس المسار"></canvas><div class="level-banner" id="badge">REWIND / 01</div>
+<div class="modal" id="modal"><div class="modalcard"><div class="modalicon" id="modalicon">✨</div><div class="modaltitle" id="modaltitle">أحسنت!</div><p class="modaltext" id="modaltext"></p><div class="stars" id="modalstars">✦ ✦ ✦</div><button class="primary" id="modalaction">المستوى التالي ←</button></div></div></div>
+<section class="progresspanel"><div class="progresshead"><span>اشحن المدار بالانفجارات</span><strong id="progress-number">0 / 12</strong></div><div class="progress"><div class="fill" id="fill"></div></div></section>
+<div class="status" id="status">المس إحدى الكرات المضيئة لتبدأ</div>
+<div class="actions"><button class="primary" id="hint">أرني حركة مفيدة ◎</button><button class="secondary" id="retry">إعادة ↻</button></div>
+<div class="bottom">جميع المستويات مجانية · بلا حساب · تعمل بلمسة واحدة · الحفظ على هذا الجهاز</div>
+<div class="footer-note">PLAYABLE CONCEPT DEMO · NOT A FINISHED COMMERCIAL GAME</div>
+</main>
+<script>
+(function(){
+"use strict";
+var canvas=document.getElementById("arena"),g=canvas.getContext("2d"),W=390,H=460,CX=195,CY=245;
+var $=function(id){return document.getElementById(id)};
+var PAL=["#57e4f4","#fc81ae","#fcd078","#ae94ff","#71ebb6"];
+var SHAPES=["✦","◆","✳","●","★"];
+var rings=[98,161],speeds=[.38,-.29],balls=[],particles=[],bursts=[],floatText=[],bgstars=[];
+var state={level:1,score:0,best:0,moves:8,target:10,popped:0,combo:1,win:false,lose:false,waiting:false,muted:true,lastHit:0,seed:1,hintId:-1,levelStart:0};
+var audio=null,lastTime=0,scaleDpr=Math.min(2,window.devicePixelRatio||1),topPct=0;
+try{state.level=Math.max(1,Math.min(1000,parseInt(localStorage.getItem("echo_orbit_level")||"1",10)||1));state.best=Number(localStorage.getItem("echo_orbit_best")||0)}catch(e){}
+var randomSeed=1234;
+function rand(){randomSeed=(1664525*randomSeed+1013904223)>>>0;return randomSeed/4294967296}
+function clamp(v,a,b){return Math.max(a,Math.min(b,v))}
+function mod(x,m){return (x%m+m)%m}
+function dAngle(a,b){return Math.abs(mod(a-b+Math.PI,Math.PI*2)-Math.PI)}
+function rgb(hex){var h=hex.slice(1);return [parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)]}
+function say(s,good){$("status").textContent=s;$("status").classList.toggle("good",!!good)}
+function sound(f,d,type){if(state.muted)return;try{audio=audio||new(window.AudioContext||window.webkitAudioContext)();var o=audio.createOscillator(),gn=audio.createGain();o.type=type||"sine";o.frequency.setValueAtTime(f,audio.currentTime);gn.gain.setValueAtTime(.06,audio.currentTime);gn.gain.exponentialRampToValueAtTime(.001,audio.currentTime+d);o.connect(gn);gn.connect(audio.destination);o.start();o.stop(audio.currentTime+d)}catch(e){}}
+function initStars(){bgstars=[];randomSeed=94342;for(var i=0;i<84;i++)bgstars.push({x:rand()*W,y:rand()*H,r:rand()*1.5+.3,phase:rand()*6.28})}
+initStars();
+function reset(level){state.level=level;state.win=false;state.lose=false;state.waiting=false;state.muted=state.muted;state.moves=Math.max(7,9-Math.floor((level-1)/4));state.combo=1;state.popped=0;state.hintId=-1;state.levelStart=performance.now()/1000;
+ balls=[];particles=[];bursts=[];floatText=[];
+ randomSeed=level*1919+33;
+ var ncolors=Math.min(5,level<3?3:level<7?4:5);
+ var inner=Math.min(13,7+Math.floor((level-1)/2)),outer=Math.min(16,10+Math.floor((level-1)/3));
+ function makeRing(ring,n){var ordered=[];for(var i=0;i<n;i++){ordered.push(i%ncolors)}for(var j=0;j<n;j++){var color=ordered[j];var ang=2*Math.PI*j/n+.04*rand()+rand()*.02;balls.push({id:balls.length,ring:ring,angle:ang+ring*.14,color:color,r:ring===0?16.5:15.8,glow:rand()*6,reverse:0,active:true,trail:[],hint:false,hitPulse:0})}}
+ makeRing(0,inner);makeRing(1,outer);
+ state.target=Math.min(inner+outer-2,level<2?8:level<5?10:12+Math.floor((level-4)/3)*2);
+ updateHud();$("badge").textContent="REWIND / "+String(level).padStart(2,"0");$("modal").classList.remove("show");
+ say("اضغط على كرة لتحويل اتجاه حركتها",false);
+ try{localStorage.setItem("echo_orbit_level",String(level))}catch(e){}
+}
+function updateHud(){
+ $("level").textContent=String(state.level).padStart(2,"0");
+ $("moves").textContent=String(state.moves).padStart(2,"0");
+ $("score").textContent=String(state.score).padStart(4,"0");
+ $("combo").textContent="×"+state.combo;
+ $("progress-number").textContent=state.popped+" / "+state.target;
+ $("fill").style.width=clamp(100*state.popped/state.target,0,100)+"%";
+}
+function pos(b){return{x:CX+Math.cos(b.angle)*rings[b.ring],y:CY+Math.sin(b.angle)*rings[b.ring]}}
+function pulse(x,y,c,how){bursts.push({x:x,y:y,t:0,life:.75,c:c,r:how||70})}
+function popParticles(x,y,c,num){for(var i=0;i<num;i++){var a=rand()*Math.PI*2,s=25+rand()*120;particles.push({x:x,y:y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:.58+rand()*.35,max:.85,r:2+rand()*3.5,c:c})}}
+function popup(x,y,t,c){floatText.push({x:x,y:y,life:1.2,max:1.2,text:t,c:c||"#f4dc87"})}
+function collide(a,b,now){
+ if(!a.active||!b.active)return;
+ a.active=false;b.active=false;
+ var p1=pos(a),p2=pos(b);var x=(p1.x+p2.x)/2,y=(p1.y+p2.y)/2;
+ state.popped+=2;state.combo=Math.min(9,state.combo+1);
+ var points=100*state.combo;state.score+=points;
+ if(state.score>state.best){state.best=state.score;try{localStorage.setItem("echo_orbit_best",String(state.best))}catch(e){}}
+ pulse(x,y,PAL[a.color],115);popParticles(x,y,PAL[a.color],24);popup(x,y,"+"+points+"  ×"+state.combo);
+ sound(420+70*(state.combo%5),.16,"triangle");setTimeout(function(){sound(780+40*(state.combo%5),.13)},80);
+ state.lastHit=now;say("سلسلة انفجارات! ×"+state.combo,true);
+ // a successful pop can set up a second bounce when neighbors are close to the burst
+ for(var k=0;k<balls.length;k++){
+   var c=balls[k];
+   if(!c.active||c.ring!==a.ring||c.color!==a.color||c.reverse>0)continue;
+   var cp=pos(c);
+   var dist=Math.hypot(cp.x-x,cp.y-y);
+   if(dist<65 && rand()<.48){c.reverse=Math.max(c.reverse,.85);c.hitPulse=1;}
+ }
+ updateHud();
+ if(state.popped>=state.target){win();}
+}
+function win(){
+ if(state.win||state.lose)return;
+ state.win=true;state.waiting=true;
+ say("اكتمل المدار! ممتاز ✨",true);sound(660,.18);setTimeout(function(){sound(900,.19)},180);setTimeout(function(){sound(1120,.23)},360);
+ setTimeout(function(){modal(true)},720);
+}
+function lose(){
+ if(state.win||state.lose)return;
+ state.lose=true;state.waiting=true;
+ say("اقتربت! أعد المحاولة",false);
+ setTimeout(function(){modal(false)},400);
+}
+function modal(won){
+ $("modalicon").textContent=won?"🏆":"↺";
+ $("modaltitle").textContent=won?"أحسنت!":"جرّب من جديد";
+ $("modaltext").textContent=won?"أطلقت "+state.popped+" انفجارًا، وجمعت "+state.score+" نقطة. كل مستوى يزيد تحدي التوقيت.":"تحتاج "+Math.max(0,state.target-state.popped)+" نقاط انفجار إضافية. اختر كرات لها توأم من اللون نفسه على الحلقة.";
+ $("modalstars").textContent=won?"✦ ✦ ✦":"✦ ✧ ✧";
+ $("modalaction").textContent=won?"المرحلة التالية ←":"أعد هذا المستوى ↻";
+ $("modal").classList.add("show");
+}
+$("modalaction").onclick=function(){reset(state.level+(state.win?1:0))};
+$("retry").onclick=function(){reset(state.level)};
+$("sound").onclick=function(){state.muted=!state.muted;$("sound").textContent=state.muted?"♫":"♪";$("sound").style.color=state.muted?"#dbe5ff":"#68f2cb";sound(600,.12)};
+function bestCandidate(){
+ var cand=null,best=1e12;
+ for(var i=0;i<balls.length;i++){
+   var b=balls[i];if(!b.active||b.reverse>0)continue;
+   var target=balls.filter(function(c){return c.active&&c.id!==b.id&&c.ring===b.ring&&c.color===b.color}).sort(function(a,c){return dAngle(a.angle,b.angle)-dAngle(c.angle,b.angle)})[0];
+   if(!target)continue;
+   var d=dAngle(b.angle,target.angle);
+   if(d<best){best=d;cand=b}
+ }
+ return cand;
+}
+$("hint").onclick=function(){var b=bestCandidate();if(b){state.hintId=b.id;say("الكرة المتوهجة ستعود لتصطدم بلونها",true);sound(560,.12)}};
+function tap(x,y){
+ if(state.win||state.lose||state.waiting)return;
+ var hit=null,min=50;
+ for(var i=0;i<balls.length;i++){
+   var b=balls[i];if(!b.active)continue;
+   var p=pos(b);var d=Math.hypot(p.x-x,p.y-y);
+   if(d<min){min=d;hit=b}
+ }
+ if(!hit){sound(240,.04);say("المس كرة ملونة على إحدى الحلقتين",false);return}
+ if(hit.reverse>0){say("هذه الكرة تعود بالزمن بالفعل",false);return}
+ if(state.moves<=0)return;
+ hit.reverse=2.22;hit.hitPulse=1;hit.trail=[];state.moves--;state.hintId=-1;state.combo=Math.max(1,state.combo-1);
+ var p=pos(hit);
+ pulse(p.x,p.y,PAL[hit.color],46);
+ popup(p.x,p.y,"↶  2 SEC",PAL[hit.color]);
+ sound(330,.11,"triangle");setTimeout(function(){sound(475,.12,"triangle")},75);
+ say("الكرة تعود للخلف… ابحث عن اصطدام!",true);updateHud();
+}
+function pointer(e){
+ e.preventDefault();
+ var r=canvas.getBoundingClientRect(),x=(e.clientX-r.left)*W/r.width,y=(e.clientY-r.top)*H/r.height;
+ tap(x,y);
+}
+canvas.addEventListener("pointerdown",pointer,{passive:false});
+window.addEventListener("keydown",function(e){if(e.code==="Space"&&!(state.win||state.lose)){e.preventDefault();var b=bestCandidate();if(b){var p=pos(b);tap(p.x,p.y)}}});
+function drawRoundBox(x,y,w,h,r,fill){g.beginPath();g.roundRect(x,y,w,h,r);g.fillStyle=fill;g.fill()}
+function drawBackground(t){
+ var bg=g.createRadialGradient(CX,CY,30,CX,CY,300);bg.addColorStop(0,"#1b3053");bg.addColorStop(.7,"#0d1933");bg.addColorStop(1,"#091126");g.fillStyle=bg;g.fillRect(0,0,W,H);
+ var shine=g.createRadialGradient(CX,CY,12,CX,CY,190);shine.addColorStop(0,"rgba(92,224,243,.045)");shine.addColorStop(1,"transparent");g.fillStyle=shine;g.fillRect(0,0,W,H);
+ for(var i=0;i<bgstars.length;i++){
+  var st=bgstars[i];g.globalAlpha=.19+Math.sin(t*.5+st.phase)*.14;g.fillStyle="#acd3f8";g.beginPath();g.arc(st.x,st.y,st.r,0,6.283);g.fill()
+ }g.globalAlpha=1;
+ for(var j=0;j<rings.length;j++){
+  var r=rings[j],cc=j===0?"#355d88":"#314e76";
+  g.beginPath();g.strokeStyle=cc;g.lineWidth=1.8;g.arc(CX,CY,r,0,6.283);g.stroke();
+  g.setLineDash([3,11]);g.beginPath();g.lineWidth=1.1;g.strokeStyle="#40688860";g.arc(CX,CY,r+19,0,6.283);g.stroke();g.setLineDash([]);
+  for(var k=0;k<18;k++){var a=k*Math.PI/9+t*speeds[j]*.2;var x=CX+Math.cos(a)*r,y=CY+Math.sin(a)*r;g.beginPath();g.arc(x,y,1.1,0,6.283);g.fillStyle="#5c87b065";g.fill()}
+ }
+ var core=g.createRadialGradient(CX-7,CY-7,0,CX,CY,45);
+ core.addColorStop(0,"#6affe8");core.addColorStop(.3,"#49bac9");core.addColorStop(.35,"#204d79");core.addColorStop(1,"#142f50");
+ g.fillStyle=core;g.beginPath();g.arc(CX,CY,38+Math.sin(t*2)*1.5,0,6.283);g.fill();
+ g.strokeStyle="#6bfce677";g.lineWidth=1.5;g.beginPath();g.arc(CX,CY,43,0,6.283);g.stroke();
+ g.fillStyle="#d7fff6";g.textAlign="center";g.textBaseline="middle";g.font="bold 27px sans-serif";g.fillText("↶",CX,CY-1);
+ g.font="bold 8px sans-serif";g.fillStyle="#8ebbd3";g.fillText("TIME",CX,CY+24);
+}
+function drawBalls(t){
+ for(var i=0;i<balls.length;i++){
+  var b=balls[i];if(!b.active)continue;
+  var p=pos(b),c=PAL[b.color],selected=state.hintId===b.id||b.reverse>0;
+  if(selected){
+   var halo= g.createRadialGradient(p.x,p.y,4,p.x,p.y,36);
+   halo.addColorStop(0,c+"78");halo.addColorStop(1,c+"00");
+   g.fillStyle=halo;g.beginPath();g.arc(p.x,p.y,36,0,6.283);g.fill();
+  }
+  for(var j=0;j<b.trail.length;j++){
+   var tr=b.trail[j],fraction=j/Math.max(1,b.trail.length);
+   g.globalAlpha=fraction*.31;g.beginPath();g.arc(tr.x,tr.y,b.r*(.2+.5*fraction),0,6.283);g.fillStyle=c;g.fill()
+  }g.globalAlpha=1;
+  var glow=g.createRadialGradient(p.x-5,p.y-7,1,p.x,p.y,b.r*1.4);
+  glow.addColorStop(0,"#ffffff");glow.addColorStop(.17,"#fff9");
+  glow.addColorStop(.34,c);glow.addColorStop(1,c+"65");
+  g.shadowColor=c;g.shadowBlur=selected?23:12;
+  g.fillStyle=glow;g.beginPath();g.arc(p.x,p.y,b.r,0,6.283);g.fill();g.shadowBlur=0;
+  g.strokeStyle="#ffffff95";g.lineWidth=1.5;g.beginPath();g.arc(p.x,p.y,b.r-.5,0,6.283);g.stroke();
+  g.font="bold 13px sans-serif";g.textAlign="center";g.textBaseline="middle";g.fillStyle="#09203f";g.fillText(SHAPES[b.color],p.x,p.y+.5);
+  if(state.hintId===b.id){g.strokeStyle="#fff8cb";g.lineWidth=2.5;g.beginPath();g.arc(p.x,p.y,b.r+7+Math.sin(t*7)*2,0,6.283);g.stroke()}
+  if(b.reverse>0){g.strokeStyle=c;g.lineWidth=2.5;g.beginPath();g.arc(p.x,p.y,b.r+5,-Math.PI/2,-Math.PI/2+b.reverse/2.22*6.283);g.stroke()}
+ }
+}
+function update(dt,t){
+ for(var i=0;i<balls.length;i++){
+  var b=balls[i];if(!b.active)continue;
+  if(b.reverse>0){b.reverse=Math.max(0,b.reverse-dt);b.angle-=speeds[b.ring]*dt*4.8;var p=pos(b);b.trail.push(p);if(b.trail.length>11)b.trail.shift();}
+  else{b.angle+=speeds[b.ring]*dt;b.trail.length=0}
+  b.angle=mod(b.angle,6.283185307);
+ }
+ // only reverse-triggered collisions; passive orbital motion never pops
+ for(var j=0;j<balls.length;j++){var a=balls[j];if(!a.active||a.reverse<=0)continue;
+  for(var k=0;k<balls.length;k++){var b2=balls[k];if(!b2.active||a===b2||a.ring!==b2.ring||a.color!==b2.color)continue;
+    if(dAngle(a.angle,b2.angle)<(a.ring===0?.28:.195)){collide(a,b2,t);break}
+  }
+ }
+ for(var a2=particles.length-1;a2>=0;a2--){var pt=particles[a2];pt.life-=dt;pt.x+=pt.vx*dt;pt.y+=pt.vy*dt;pt.vx*=.985;pt.vy*=.985;if(pt.life<=0)particles.splice(a2,1)}
+ for(var s=bursts.length-1;s>=0;s--){bursts[s].t+=dt;if(bursts[s].t>bursts[s].life)bursts.splice(s,1)}
+ for(var f=floatText.length-1;f>=0;f--){floatText[f].life-=dt;floatText[f].y-=dt*28;if(floatText[f].life<=0)floatText.splice(f,1)}
+ if(!state.win&&!state.lose&&state.moves<=0&&balls.every(function(b){return !b.active||b.reverse<=0}))lose();
+ if(!state.win&&!state.lose&&t-state.lastHit>3.3&&state.combo>1){state.combo=1;updateHud()}
+}
+function drawFx(t){
+ for(var i=0;i<bursts.length;i++){var b=bursts[i],f=b.t/b.life;
+  g.globalAlpha=(1-f)*.85;g.beginPath();g.strokeStyle=b.c;g.lineWidth=4*(1-f)+.5;g.arc(b.x,b.y,5+b.r*f,0,6.283);g.stroke();
+  g.globalAlpha=(1-f)*.15;g.beginPath();g.fillStyle=b.c;g.arc(b.x,b.y,16+b.r*f*.6,0,6.283);g.fill()
+ }g.globalAlpha=1;
+ for(var j=0;j<particles.length;j++){var p=particles[j];g.globalAlpha=clamp(p.life/p.max,0,1);g.fillStyle=p.c;g.shadowColor=p.c;g.shadowBlur=10;g.beginPath();g.arc(p.x,p.y,p.r,0,6.283);g.fill()}g.globalAlpha=1;g.shadowBlur=0;
+ for(var k=0;k<floatText.length;k++){var ft=floatText[k];g.globalAlpha=clamp(ft.life/ft.max,0,1);g.font="900 18px system-ui";g.textAlign="center";g.textBaseline="middle";g.strokeStyle="#0d1731";g.lineWidth=4;g.strokeText(ft.text,ft.x,ft.y);g.fillStyle=ft.c;g.fillText(ft.text,ft.x,ft.y)}g.globalAlpha=1;
+}
+function frame(time){var t=time*.001,dt=Math.min(.033,Math.max(0,t-lastTime));lastTime=t;
+ g.setTransform(1,0,0,1,0,0);g.clearRect(0,0,W,H);
+ if(!state.waiting)update(dt,t);
+ drawBackground(t);drawBalls(t);drawFx(t);
+ requestAnimationFrame(frame)
+}
+reset(state.level);requestAnimationFrame(frame);
+})();
+</script>
+</body></html>
