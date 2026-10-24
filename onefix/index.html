@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b1429">
+<title>ONE FIX — لعبة حركة واحدة</title>
+<meta name="description" content="لعبة ألغاز صغيرة: أصلح قطعة واحدة وأوصل الطاقة بالنجمة. العب مجانًا ودون تسجيل دخول.">
+<style>
+:root{color-scheme:dark;--ink:#eff9ff;--sub:#95acc8;--cyan:#53f1d2;--gold:#ffcf71;--line:#344b69}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;min-height:100svh;display:flex;align-items:center;justify-content:center;padding:18px;background:radial-gradient(ellipse at 12% 5%,#25416e 0,transparent 41%),radial-gradient(ellipse at 90% 92%,#312755 0,transparent 41%),#081121;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink)}
+main{width:min(100%,530px);position:relative}
+header{display:flex;align-items:center;justify-content:space-between;margin:4px 0 26px}
+.brand{font:950 28px/1.1 system-ui,sans-serif;direction:ltr;letter-spacing:-1.7px}
+.brand em{font-style:normal;color:var(--cyan)}
+.under{font-size:12px;color:var(--sub);margin-top:6px}
+.icon{width:45px;height:45px;border-radius:14px;background:#16263f;border:1px solid var(--line);color:#d8e9fa;font-size:19px;cursor:pointer}
+.headline{display:flex;align-items:flex-end;justify-content:space-between;margin:0 3px 20px}
+.meta-label{font-size:12px;color:#98aac5}.number{font-size:35px;font-weight:900;line-height:1.3}
+.score{text-align:left;direction:ltr;color:var(--gold)}
+.instructions{font-size:14px;color:#bfd3ea;line-height:1.9;margin:0 4px 19px}
+.panel{border:1px solid #3c5270;border-radius:26px;background:linear-gradient(147deg,#1c304d,#111d32);padding:18px 17px 24px;box-shadow:0 24px 65px #0008,inset 0 1px 0 #ffffff12;position:relative}
+.panel:before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:radial-gradient(ellipse at 50% 48%,#3fdab511,transparent 72%)}
+.level-tag{display:inline-flex;padding:5px 11px;border-radius:40px;background:#173d47;border:1px solid #2d656c;color:#80fce6;font-size:11px;font-weight:650}
+.grid-shell{position:relative;margin:24px auto 13px;max-width:388px;direction:ltr}
+.grid{display:grid;gap:7px;grid-template-columns:repeat(4,minmax(0,1fr))}
+.tile{min-width:0;aspect-ratio:1;border:1px solid #3b5475;border-radius:15px;background:linear-gradient(155deg,#2b405d,#1c2b44);box-shadow:0 4px 0 #0b1729,inset 0 1px 0 #ffffff12;padding:0;cursor:pointer;transition:transform .14s,border .14s,box-shadow .14s;touch-action:manipulation}
+.tile svg{height:100%;width:100%;display:block;pointer-events:none}
+.tile path{stroke:#7f9dbe}.tile circle{fill:#a2c2d3}
+.tile.decoy path{stroke:#496785}.tile.decoy circle{fill:#637c9b}
+.tile.blank{cursor:default;border:1px solid #283d575b;background:#17294177;box-shadow:none}
+.tile:not(.blank):active{transform:translateY(4px)}
+.tile:not(.blank):hover{border-color:#80b3ce}
+.tile.lit{border-color:#41dcbf;box-shadow:0 0 0 1px #6cffe242,0 0 17px #3effc04d,0 4px 0 #0a1930}
+.tile.lit path{stroke:#54ffdd;filter:drop-shadow(0 0 6px #4cf7cc)}
+.tile.lit circle{fill:#eafff5}
+.tile.guess{animation:wrong .34s ease}
+.tile.hint{animation:hint 1s ease-in-out infinite;border-color:#ffca71}
+.socket{position:absolute;z-index:2;width:35px;height:35px;display:grid;place-items:center;border-radius:50%;transform:translateY(-50%);top:50%;pointer-events:none;font-size:18px}
+.socket.start{left:-19px;border:2px solid #ffcc6a;background:#4b3828;box-shadow:0 0 19px #ffc65a72}
+.socket.end{right:-19px;border:2px solid #4af6c9;background:#1b4b43;box-shadow:0 0 19px #3deac477}
+.track{display:flex;gap:8px;justify-content:center;margin:21px 0 3px}
+.track b{height:5px;width:30px;max-width:14%;border-radius:6px;background:#40536f}.track b.on{background:var(--cyan);box-shadow:0 0 11px #45e5c3}
+.message{text-align:center;min-height:115px;padding:21px 5px 8px}
+.message strong{font-size:22px;display:block;color:#f4faff}.message p{color:#a9bfd7;font-size:13px;line-height:1.7;min-height:25px;margin:8px 0}
+.actions{display:flex;gap:10px;margin:0 0 17px}.actions button{height:54px;border-radius:15px;font-size:15px;font-weight:850;cursor:pointer}
+.next{flex:1;background:var(--cyan);border:0;color:#07322f;box-shadow:0 8px 25px #35edc034}
+.next:disabled{background:#284d55;color:#9cc3c7;cursor:not-allowed;box-shadow:none}
+.hintbutton{background:#182b43;border:1px solid #3e5475;color:#c7d9e9;padding:0 19px}
+.bottom{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.textbtn{background:none;color:#9fb4cc;border:0;font-size:12px;text-decoration:underline;text-underline-offset:4px;cursor:pointer}
+.foot{text-align:center;color:#879bb6;font-size:12px;line-height:1.7;margin-top:20px}
+#confetti{pointer-events:none;position:fixed;inset:0;overflow:hidden;z-index:10}
+.particle{position:absolute;top:-20px;width:8px;height:14px;animation:fall 1.5s ease-in forwards}
+@keyframes fall{to{transform:translateY(108svh) rotate(760deg);opacity:0}}
+@keyframes wrong{25%{transform:translateX(-5px)}50%{border-color:#ff9a94;box-shadow:0 0 15px #ff8c9955}75%{transform:translateX(5px)}}
+@keyframes hint{50%{box-shadow:0 0 0 3px #ffd0788a,0 0 20px #ffd0788f}}
+@media(max-width:400px){body{padding:14px}.panel{padding:16px 13px 19px}.grid{gap:5px}.tile{border-radius:11px}.number{font-size:30px}.brand{font-size:25px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.001s!important;transition:none!important}}
+</style>
+</head>
+<body>
+<main>
+<header><div><div class="brand">ONE <em>FIX</em></div><div class="under">حركة واحدة تغيّر كل شيء</div></div><button class="icon" id="sound" aria-label="تشغيل الصوت">♫</button></header>
+<div class="headline"><div><div class="meta-label">المستوى</div><div class="number" id="level">01</div></div><div style="text-align:left"><div class="meta-label">النقاط</div><div class="number score" id="score">0</div></div></div>
+<p class="instructions">أوصل البرق ⚡ بالنجمة ★. هناك قطعة واحدة خاطئة؛ اضغط عليها لتصحيح مسار الطاقة.</p>
+<section class="panel">
+<span class="level-tag" id="mode">المستوى التمهيدي</span>
+<div class="grid-shell" id="grid-shell"><div class="grid" id="grid" aria-label="لوحة قطع الطاقة"></div></div>
+<div class="track" id="track"></div>
+</section>
+<section class="message" aria-live="polite"><strong id="title">أيّ قطعة تحتاج الإصلاح؟</strong><p id="message">اختر القطعة الصحيحة بلمسة واحدة.</p></section>
+<div class="actions"><button class="next" id="next" disabled>أكمل الدائرة أولًا</button><button class="hintbutton" id="hint">تلميح</button></div>
+<div class="bottom"><button class="textbtn" id="restart">إعادة من البداية</button><button class="textbtn" id="share">مشاركة اللعبة ↗</button></div>
+<div class="foot">تعمل مباشرة في المتصفح • دون حساب • دون تحميل</div>
+</main>
+<div id="confetti" aria-hidden="true"></div>
+<script>
+(()=>{
+"use strict";
+const $=id=>document.getElementById(id);
+const dirs=[[0,-1],[1,0],[0,1],[-1,0]],bits=[1,2,4,8],opp=[2,3,0,1];
+const rotate=m=>((m<<1)&15)|(m>>3);
+const back=m=>rotate(rotate(rotate(m)));
+const index=(x,y,n)=>y*n+x;
+const fixed=[
+[[0,1],[1,1],[1,2],[2,2],[3,2]],
+[[0,2],[1,2],[1,1],[2,1],[2,0],[3,0]],
+[[0,0],[1,0],[1,1],[2,1],[2,2],[3,2],[3,3]]
+];
+const hash=(a,b,c,d)=>{let h=(Math.imul(a+83,374761393)^Math.imul(b+19,668265263)^Math.imul(c+71,2246822519)^Math.imul(d+7,3266489917))>>>0;h=Math.imul(h^(h>>>15),2246822519);return(h^(h>>>13))>>>0};
+function makePath(level,n){
+ if(level<=3)return fixed[level-1];
+ const row1=hash(level,2,3,1)%n,row2=hash(level,5,1,3)%n;
+ let target=Math.min(n*n-2,n+3+level%5);
+ for(let attempt=0;attempt<14;attempt++){
+ const seed=level*73+attempt*41;
+ const arr=[[0,row1]],used=new Set([index(0,row1,n)]);
+ function dfs(x,y){
+  if(x===n-1&&y===row2)return arr.length>=target;
+  if(arr.length>=n*n-1)return false;
+  const candidates=dirs.map((d,i)=>[x+d[0],y+d[1],i]).filter(([nx,ny])=>nx>=0&&nx<n&&ny>=0&&ny<n&&!used.has(index(nx,ny,n)))
+   .sort((a,b)=>hash(seed,a[0],a[1],a[2])-hash(seed,b[0],b[1],b[2]));
+  for(const [nx,ny] of candidates){
+   if(nx===n-1&&ny===row2&&arr.length+1<target)continue;
+   used.add(index(nx,ny,n));arr.push([nx,ny]);
+   if(dfs(nx,ny))return true;
+   arr.pop();used.delete(index(nx,ny,n));
+  }
+  return false;
+ }
+ if(dfs(0,row1))return arr;
+ }
+ const arr=[];for(let x=0;x<n;x++)arr.push([x,row1]);let y=row1;
+ while(y!==row2){y+=row2>y?1:-1;arr.push([n-1,y])}
+ return arr;
+}
+function makePuzzle(level){
+ const n=level<4?4:level<13?5:6;
+ const route=makePath(level,n),cells=Array.from({length:n*n},()=>({kind:"blank",mask:0}));
+ route.forEach(([x,y],i)=>{
+  const prev=route[i-1]||[x-1,y],next=route[i+1]||[x+1,y];
+  const a=dirs.findIndex(d=>x+d[0]===prev[0]&&y+d[1]===prev[1]);
+  const b=dirs.findIndex(d=>x+d[0]===next[0]&&y+d[1]===next[1]);
+  cells[index(x,y,n)]={kind:"pipe",mask:bits[a]|bits[b]};
+ });
+ if(level>3)for(let y=0;y<n;y++)for(let x=0;x<n;x++){
+  const i=index(x,y,n),r=hash(level,x,y,7);
+  if(cells[i].kind==="blank" && r%100<(level<8?18:35))
+   cells[i]={kind:"decoy",mask:[5,10,3,6,12,9][hash(level,x,y,11)%6]};
+ }
+ const options=route.slice(1,-1);
+ const broken=options[hash(level,6,2,8)%options.length];
+ const bad=index(broken[0],broken[1],n);
+ cells[bad]={kind:"pipe",mask:back(cells[bad].mask)};
+ return {level,n,cells,bad,sourceRow:route[0][1],goalRow:route[route.length-1][1]};
+}
+function trace(p){
+ let x=0,y=p.sourceRow,entry=3;const lit=[],seen=new Set();
+ while(x>=0&&x<p.n&&y>=0&&y<p.n){
+  const i=index(x,y,p.n);if(seen.has(i))break;seen.add(i);
+  const mask=p.cells[i].mask;
+  if(!(mask&bits[entry]))break;
+  lit.push(i);
+  const output=mask&~bits[entry];const exit=bits.indexOf(output);
+  if(exit<0)break;
+  if(exit===1&&x===p.n-1&&y===p.goalRow)return {lit,success:true};
+  x+=dirs[exit][0];y+=dirs[exit][1];entry=opp[exit];
+ }
+ return {lit,success:false};
+}
+const key="onefix:demo:v3";
+let saved={};try{saved=JSON.parse(localStorage.getItem(key)||"{}")}catch{}
+const state={
+ level:Math.max(1,Math.min(999,Number(saved.level)||1)),
+ score:Math.max(0,Number(saved.score)||0),
+ attempts:0,solved:false,streak:0,hadHint:false,quiet:true
+};
+let p=makePuzzle(state.level),audio;
+function sound(freq=610,len=.08){
+ if(state.quiet)return;
+ try{audio=audio||new (window.AudioContext||window.webkitAudioContext)();let o=audio.createOscillator(),g=audio.createGain();
+ o.type="sine";o.frequency.value=freq;g.gain.setValueAtTime(.06,audio.currentTime);g.gain.exponentialRampToValueAtTime(.001,audio.currentTime+len);
+ o.connect(g);g.connect(audio.destination);o.start();o.stop(audio.currentTime+len)}catch{}
+}
+function save(){try{localStorage.setItem(key,JSON.stringify({level:state.level,score:state.score}))}catch{}}
+function svg(mask,kind){
+ if(kind==="blank")return '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="3" fill="#304761"/></svg>';
+ let path="";
+ const ends=[[50,3,1],[97,50,2],[50,97,4],[3,50,8]];
+ for(const [x,y,b] of ends)if(mask&b)path+="M50 50 L"+x+" "+y+" ";
+ return '<svg viewBox="0 0 100 100"><path d="'+path+'" stroke-width="16" stroke-linecap="round" fill="none"/><circle cx="50" cy="50" r="9"/></svg>';
+}
+function render(){
+ $("level").textContent=String(state.level).padStart(2,"0");
+ $("score").textContent=String(state.score);
+ $("mode").textContent=state.level<=3?"تعلّم توصيل الطاقة":state.level<=12?"مسارات متداخلة":"تحدّي المسارات";
+ const grid=$("grid"),powered=new Set(trace(p).lit);
+ grid.style.gridTemplateColumns="repeat("+p.n+",minmax(0,1fr))";
+ grid.textContent="";
+ p.cells.forEach((cell,i)=>{
+  const b=document.createElement("button");
+  b.className="tile "+cell.kind+(powered.has(i)?" lit":"");
+  b.setAttribute("aria-label","قطعة "+(i+1));b.disabled=cell.kind==="blank"||state.solved;
+  b.innerHTML=svg(cell.mask,cell.kind);b.addEventListener("click",()=>clickCell(i));
+  grid.append(b);
+ });
+ const shell=$("grid-shell");shell.querySelectorAll(".socket").forEach(el=>el.remove());
+ const start=document.createElement("span"),end=document.createElement("span");
+ start.className="socket start";end.className="socket end";start.textContent="⚡";end.textContent="★";
+ start.style.top="calc((100% / "+p.n+") * "+(p.sourceRow+.5)+")";
+ end.style.top="calc((100% / "+p.n+") * "+(p.goalRow+.5)+")";
+ shell.append(start,end);
+ $("track").textContent="";
+ for(let j=0;j<5;j++){const dot=document.createElement("b");if(j===(state.level-1)%5)dot.className="on";$("track").append(dot)}
+ $("next").disabled=!state.solved;
+ $("next").textContent=state.solved?"المستوى التالي ←":"أكمل الدائرة أولًا";
+ $("hint").disabled=state.solved;
+ $("hint").style.opacity=state.solved?".5":"1";
+}
+function celebrate(){
+ const box=$("confetti");box.textContent="";
+ const colors=["#47e9c9","#ffcf76","#8eacff","#ffa0b7"];
+ for(let i=0;i<42;i++){const bit=document.createElement("span");bit.className="particle";bit.style.left=((i*29+13)%100)+"%";bit.style.background=colors[i%4];bit.style.animationDelay=((i*7)%12)*.035+"s";box.append(bit)}
+ setTimeout(()=>box.textContent="",1600);sound(660,.11);setTimeout(()=>sound(860,.14),110);setTimeout(()=>sound(1080,.2),230);
+}
+function clickCell(i){
+ if(state.solved||p.cells[i].kind==="blank")return;
+ state.attempts++;
+ if(i!==p.bad){
+   const tile=$("grid").children[i];tile.classList.remove("guess");void tile.offsetWidth;tile.classList.add("guess");
+   $("message").textContent="ليست هذه القطعة. تابع النظر إلى المسار المضيء.";
+   sound(210,.13);return;
+ }
+ p.cells[i].mask=rotate(p.cells[i].mask);
+ if(!trace(p).success){p.cells[i].mask=back(p.cells[i].mask);$("message").textContent="جرّب مرة أخرى.";return;}
+ state.solved=true;
+ const earned=Math.max(20,100-(state.attempts-1)*10-(state.hadHint?20:0));
+ state.score+=earned;
+ $("title").textContent="رائع! اكتملت الدائرة ✦";
+ $("title").style.color="#63ffe0";
+ $("message").textContent="+"+earned+" نقطة — "+(state.attempts===1?"حلّ من أول محاولة!":"تم الحل بعد "+state.attempts+" محاولات");
+ render();save();celebrate();
+}
+function reset(level){
+ state.level=level;state.attempts=0;state.solved=false;state.hadHint=false;
+ p=makePuzzle(level);$("title").textContent="أيّ قطعة تحتاج الإصلاح؟";$("title").style.color="#f4faff";
+ $("message").textContent="اختر القطعة الصحيحة بلمسة واحدة.";
+ render();save();
+}
+$("next").onclick=()=>{if(state.solved){sound(500,.08);reset(state.level+1)}};
+$("hint").onclick=()=>{
+ if(state.solved)return;state.hadHint=true;
+ $("message").textContent="القطعة ذات الإطار الذهبي تحتاج التدوير.";
+ const el=$("grid").children[p.bad];el.classList.add("hint");el.scrollIntoView?.({block:"nearest",behavior:"smooth"});sound(730,.08);
+};
+$("sound").onclick=()=>{
+ state.quiet=!state.quiet;$("sound").textContent=state.quiet?"♫":"♪";
+ $("sound").style.color=state.quiet?"#d8e9fa":"#64f0d7";sound(590,.12)
+};
+$("restart").onclick=()=>{if(confirm("هل تريد العودة إلى المستوى الأول؟")){state.score=0;reset(1)}};
+$("share").onclick=async()=>{
+ try{await navigator.clipboard.writeText(location.href);$("message").textContent="تم نسخ رابط اللعبة."}
+ catch{$("message").textContent="انسخ عنوان الصفحة لمشاركة اللعبة."}
+};
+render();
+})();
+</script>
+</body>
+</html>
